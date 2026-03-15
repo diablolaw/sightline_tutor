@@ -162,16 +162,6 @@ export default function Page() {
             onEndSession={handleEndSession}
             onCaptureImage={handleCapture}
           />
-
-          <MicControls
-            inputLevel={microphone.inputLevel}
-            isStarting={microphone.isStarting}
-            isRecording={microphone.isRecording}
-            isReady={microphone.isReady}
-            error={microphone.error}
-            disabled={!isSessionActive}
-            onToggle={toggleMic}
-          />
         </section>
 
         <section className="workspace__column">
@@ -185,7 +175,17 @@ export default function Page() {
             isAudioPlaying={audioPlayer.isPlaying}
           />
 
-          <section className="panel">
+          <MicControls
+            inputLevel={microphone.inputLevel}
+            isStarting={microphone.isStarting}
+            isRecording={microphone.isRecording}
+            isReady={microphone.isReady}
+            error={microphone.error}
+            disabled={!isSessionActive}
+            onToggle={toggleMic}
+          />
+
+          <section className="panel panel--debug">
             <button
               type="button"
               className="debug-toggle"

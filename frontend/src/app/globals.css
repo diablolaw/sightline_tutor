@@ -83,6 +83,11 @@ textarea {
   backdrop-filter: blur(16px);
 }
 
+.panel--debug {
+  opacity: 0.84;
+  box-shadow: 0 10px 24px rgba(55, 35, 14, 0.05);
+}
+
 .panel--grow {
   flex: 1;
   min-height: 360px;
@@ -395,9 +400,9 @@ textarea {
 .debug-toggle__title {
   display: block;
   margin-top: 4px;
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted);
 }
 
 .debug-stack {
