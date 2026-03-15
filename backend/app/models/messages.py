@@ -19,7 +19,7 @@ class ImageFramePayload(BaseModel):
 
 class AudioChunkPayload(BaseModel):
     mime_type: str = Field(default="audio/pcm", min_length=1)
-    data_base64: str = Field(min_length=1)
+    data_base64: str | None = None
     end_of_stream: bool = False
     activity_start: bool = False
     activity_end: bool = False

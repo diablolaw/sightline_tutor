@@ -30,11 +30,20 @@ class GeminiLiveService:
         self._client = genai.Client(api_key=settings.gemini_api_key)
         self._session_cm = None
         self._session = None
+        self._audio_chunk_count = 0
 
     async def connect(self) -> None:
         config_kwargs: dict[str, Any] = {
             "response_modalities": [self.response_modality],
             "system_instruction": DEFAULT_SYSTEM_INSTRUCTION,
+            "input_audio_transcription": {},
+            "realtime_input_config": types.RealtimeInputConfig(
+                automatic_activity_detection=types.AutomaticActivityDetection(
+                    disabled=True,
+                ),
+                activity_handling=types.ActivityHandling.START_OF_ACTIVITY_INTERRUPTS,
+                turn_coverage=types.TurnCoverage.TURN_INCLUDES_ALL_INPUT,
+            ),
         }
         if self.response_modality == "AUDIO":
             config_kwargs["output_audio_transcription"] = {}
@@ -61,51 +70,82 @@ class GeminiLiveService:
 
     async def send_text(self, text: str, end_of_turn: bool = True) -> None:
         self._ensure_session()
-        await self._session.send_client_content(
-            turns=types.Content(
-                role="user",
-                parts=[types.Part(text=text)],
-            ),
-            turn_complete=end_of_turn,
-        )
+        try:
+            await self._session.send_client_content(
+                turns=types.Content(
+                    role="user",
+                    parts=[types.Part(text=text)],
+                ),
+                turn_complete=end_of_turn,
+            )
+        except Exception as exc:  # pragma: no cover - depends on external API
+            raise GeminiLiveServiceError(
+                f"Failed to send text input to Gemini Live: {exc}"
+            ) from exc
 
     async def send_image_frame(self, data_base64: str, mime_type: str) -> None:
         self._ensure_session()
-        await self._session.send_realtime_input(
-            media=types.Blob(
-                data=self._decode_base64(data_base64),
-                mime_type=mime_type,
+        try:
+            await self._session.send_realtime_input(
+                media=types.Blob(
+                    data=self._decode_base64(data_base64),
+                    mime_type=mime_type,
+                )
             )
-        )
+        except Exception as exc:  # pragma: no cover - depends on external API
+            raise GeminiLiveServiceError(
+                f"Failed to send image frame to Gemini Live: {exc}"
+            ) from exc
 
     async def send_audio_chunk(
         self,
-        data_base64: str,
+        data_base64: str | None,
         mime_type: str,
         end_of_stream: bool = False,
         activity_start: bool = False,
         activity_end: bool = False,
     ) -> None:
         self._ensure_session()
-        await self._session.send_realtime_input(
-            audio=types.Blob(
-                data=self._decode_base64(data_base64),
-                mime_type=mime_type,
-            )
-        )
+        try:
+            if activity_start:
+                logger.info(
+                    "gemini_activity_start_sent",
+                    extra={"session_id": self.session_id},
+                )
+                await self._session.send_realtime_input(activity_start={})
 
-        if end_of_stream:
-            await self._session.send_realtime_input(audio_stream_end=True)
+            if data_base64:
+                audio_bytes = self._decode_base64(data_base64)
+                self._audio_chunk_count += 1
+                logger.info(
+                    "gemini_audio_chunk_sent",
+                    extra={
+                        "session_id": self.session_id,
+                        "chunk_index": self._audio_chunk_count,
+                        "mime_type": mime_type,
+                        "bytes": len(audio_bytes),
+                    },
+                )
+                await self._session.send_realtime_input(
+                    audio=types.Blob(
+                        data=audio_bytes,
+                        mime_type=mime_type,
+                    )
+                )
 
-        if activity_start or activity_end:
-            logger.info(
-                "activity_signal_ignored",
-                extra={
-                    "session_id": self.session_id,
-                    "activity_start": activity_start,
-                    "activity_end": activity_end,
-                },
-            )
+            if activity_end:
+                logger.info(
+                    "gemini_activity_end_sent",
+                    extra={"session_id": self.session_id},
+                )
+                await self._session.send_realtime_input(activity_end={})
+
+            if end_of_stream:
+                await self._session.send_realtime_input(audio_stream_end=True)
+        except Exception as exc:  # pragma: no cover - depends on external API
+            raise GeminiLiveServiceError(
+                f"Failed to send audio input to Gemini Live: {exc}"
+            ) from exc
 
     async def interrupt(self) -> dict[str, Any]:
         self._ensure_session()
@@ -127,9 +167,10 @@ class GeminiLiveService:
         self._ensure_session()
 
         try:
-            async for message in self._session.receive():
-                for event in self._translate_message(message):
-                    yield event
+            while True:
+                async for message in self._session.receive():
+                    for event in self._translate_message(message):
+                        yield event
         except Exception as exc:  # pragma: no cover - depends on external API
             raise GeminiLiveServiceError("Gemini Live stream failed.") from exc
 
@@ -181,6 +222,13 @@ class GeminiLiveService:
         if getattr(server_content, "input_transcription", None):
             transcription = getattr(server_content.input_transcription, "text", None)
             if transcription:
+                logger.info(
+                    "gemini_input_transcription",
+                    extra={
+                        "session_id": self.session_id,
+                        "text": transcription,
+                    },
+                )
                 events.append(
                     {
                         "type": "user_transcript",

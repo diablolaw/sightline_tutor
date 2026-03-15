@@ -120,31 +120,65 @@ async def live_session_socket(websocket: WebSocket) -> None:
                 )
                 continue
 
-            if message.type == "text_input":
-                await live_service.send_text(
-                    text=message.payload.text,
-                    end_of_turn=message.payload.end_of_turn,
+            try:
+                if message.type == "text_input":
+                    await live_service.send_text(
+                        text=message.payload.text,
+                        end_of_turn=message.payload.end_of_turn,
+                    )
+                elif message.type == "image_frame":
+                    await live_service.send_image_frame(
+                        data_base64=message.payload.data_base64,
+                        mime_type=message.payload.mime_type,
+                    )
+                elif message.type == "audio_chunk":
+                    await live_service.send_audio_chunk(
+                        data_base64=message.payload.data_base64,
+                        mime_type=message.payload.mime_type,
+                        end_of_stream=message.payload.end_of_stream,
+                        activity_start=message.payload.activity_start,
+                        activity_end=message.payload.activity_end,
+                    )
+                elif message.type == "interrupt":
+                    interrupt_result = await live_service.interrupt()
+                    await _send_event(
+                        websocket,
+                        FrontendServerEvent(
+                            type="interrupted",
+                            payload=interrupt_result,
+                        ),
+                    )
+            except GeminiLiveServiceError as exc:
+                logger.exception(
+                    "live_service_message_error",
+                    extra={
+                        "session_id": backend_session_id,
+                        "message_type": message.type,
+                    },
                 )
-            elif message.type == "image_frame":
-                await live_service.send_image_frame(
-                    data_base64=message.payload.data_base64,
-                    mime_type=message.payload.mime_type,
-                )
-            elif message.type == "audio_chunk":
-                await live_service.send_audio_chunk(
-                    data_base64=message.payload.data_base64,
-                    mime_type=message.payload.mime_type,
-                    end_of_stream=message.payload.end_of_stream,
-                    activity_start=message.payload.activity_start,
-                    activity_end=message.payload.activity_end,
-                )
-            elif message.type == "interrupt":
-                interrupt_result = await live_service.interrupt()
+                if gemini_task is not None:
+                    gemini_task.cancel()
+                    await asyncio.gather(gemini_task, return_exceptions=True)
+                    gemini_task = None
+                if live_service is not None:
+                    await live_service.close()
+                    live_service = None
                 await _send_event(
                     websocket,
                     FrontendServerEvent(
-                        type="interrupted",
-                        payload=interrupt_result,
+                        type="error",
+                        payload={},
+                        error=ErrorDetails(
+                            code="gemini_live_error",
+                            message=str(exc),
+                        ),
+                    ),
+                )
+                await _send_event(
+                    websocket,
+                    FrontendServerEvent(
+                        type="session_ended",
+                        payload={"reason": "gemini_live_disconnected"},
                     ),
                 )
     except WebSocketDisconnect:
