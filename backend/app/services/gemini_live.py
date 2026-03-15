@@ -26,16 +26,21 @@ class GeminiLiveService:
     def __init__(self, session_id: str):
         self.session_id = session_id
         self.model = settings.gemini_model
-        self.response_modality = "AUDIO"
+        self.response_modality = settings.gemini_response_modality
         self._client = genai.Client(api_key=settings.gemini_api_key)
         self._session_cm = None
         self._session = None
 
     async def connect(self) -> None:
+        config_kwargs: dict[str, Any] = {
+            "response_modalities": [self.response_modality],
+            "system_instruction": DEFAULT_SYSTEM_INSTRUCTION,
+        }
+        if self.response_modality == "AUDIO":
+            config_kwargs["output_audio_transcription"] = {}
+
         config = types.LiveConnectConfig(
-            response_modalities=[self.response_modality],
-            output_audio_transcription={},
-            system_instruction=DEFAULT_SYSTEM_INSTRUCTION,
+            **config_kwargs
         )
 
         try:
@@ -46,7 +51,7 @@ class GeminiLiveService:
             self._session = await self._session_cm.__aenter__()
         except Exception as exc:  # pragma: no cover - depends on external API
             raise GeminiLiveServiceError(
-                f"Failed to connect to Gemini Live model '{self.model}'."
+                f"Failed to connect to Gemini Live model '{self.model}': {exc}"
             ) from exc
 
         logger.info(
@@ -148,16 +153,16 @@ class GeminiLiveService:
     def _translate_message(self, message: Any) -> list[dict[str, Any]]:
         events: list[dict[str, Any]] = []
 
-        if getattr(message, "text", None):
-            events.append(
-                {
-                    "type": "assistant_text",
-                    "payload": {"text": message.text, "source": "message.text"},
-                }
-            )
-
         server_content = getattr(message, "server_content", None)
         if server_content is None:
+            text = getattr(message, "text", None)
+            if text:
+                events.append(
+                    {
+                        "type": "assistant_text",
+                        "payload": {"text": text, "source": "message.text"},
+                    }
+                )
             return events
 
         if getattr(server_content, "output_transcription", None):
@@ -194,15 +199,6 @@ class GeminiLiveService:
         model_turn = getattr(server_content, "model_turn", None)
         parts = getattr(model_turn, "parts", []) or []
         for part in parts:
-            text = getattr(part, "text", None)
-            if text:
-                events.append(
-                    {
-                        "type": "assistant_text",
-                        "payload": {"text": text, "source": "model_turn"},
-                    }
-                )
-
             inline_data = getattr(part, "inline_data", None)
             if inline_data and getattr(inline_data, "data", None):
                 mime_type = getattr(inline_data, "mime_type", "application/octet-stream")

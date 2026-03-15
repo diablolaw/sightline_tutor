@@ -17,6 +17,7 @@ Minimal FastAPI backend for a real-time, vision-enabled voice tutor powered by t
 - `PORT` optional, defaults to `8080`
 - `ALLOWED_ORIGINS` optional, comma-separated list for CORS
 - `GEMINI_MODEL` optional, defaults to `models/gemini-live-2.5-flash-preview`
+- `GEMINI_RESPONSE_MODALITY` optional, defaults to `AUDO`
 
 ## Local Setup
 
@@ -119,9 +120,22 @@ gcloud run deploy sightline-tutor-backend `
 
 Cloud Run uses `PORT=8080` automatically. Keep websocket clients on HTTPS/WSS in deployed environments.
 
+For current Gemini Live testing, a safe local starting point is:
+
+```env
+GEMINI_MODEL=gemini-live-2.5-flash-preview
+GEMINI_RESPONSE_MODALITY=TEXT
+```
+
+If you switch to an audio-capable native-audio Live model, set:
+
+```env
+GEMINI_RESPONSE_MODALITY=AUDIO
+```
+
 ## Known Limitations
 
 - No database is used by design.
-- The backend defaults Gemini sessions to audio output and forwards output transcription as text when available.
+- The backend defaults Gemini Live sessions to `TEXT` output for safer local setup. Audio output requires a compatible Live model plus `GEMINI_RESPONSE_MODALITY=AUDIO`.
 - Gemini Live interruption is only partially wired. Server-side barge-in is supported when new user activity arrives, but the current Python SDK docs do not show a clearly documented explicit cancel call for a standalone `interrupt` message, so the backend reports that limitation instead of silently faking it.
 - The Live API is still preview and SDK event fields may change. SDK-specific assumptions are isolated in `app/services/gemini_live.py`.

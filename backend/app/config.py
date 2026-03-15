@@ -21,6 +21,7 @@ class Settings:
     port: int
     allowed_origins: list[str]
     gemini_model: str
+    gemini_response_modality: str
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -44,8 +45,12 @@ class Settings:
             allowed_origins=allowed_origins or DEFAULT_ALLOWED_ORIGINS,
             gemini_model=os.getenv(
                 "GEMINI_MODEL",
-                "models/gemini-live-2.5-flash-preview",
+                "gemini-live-2.5-flash-preview",
             ).strip(),
+            gemini_response_modality=os.getenv(
+                "GEMINI_RESPONSE_MODALITY",
+                "TEXT",
+            ).strip().upper(),
         )
 
 
