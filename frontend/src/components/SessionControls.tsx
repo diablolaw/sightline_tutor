@@ -2,31 +2,23 @@
 
 type SessionControlsProps = {
   connectionState: string;
-  isTransportConnected: boolean;
   canStartSession: boolean;
   canEndSession: boolean;
   canCapture: boolean;
-  onConnect: () => void;
-  onDisconnect: () => void;
   onStartSession: () => void;
   onEndSession: () => void;
   onCaptureImage: () => void;
-  onInterrupt: () => void;
 };
 
 export function SessionControls(props: SessionControlsProps) {
   const {
     connectionState,
-    isTransportConnected,
     canStartSession,
     canEndSession,
     canCapture,
-    onConnect,
-    onDisconnect,
     onStartSession,
     onEndSession,
     onCaptureImage,
-    onInterrupt,
   } = props;
 
   return (
@@ -40,16 +32,6 @@ export function SessionControls(props: SessionControlsProps) {
       </div>
 
       <div className="control-grid">
-        {!isTransportConnected ? (
-          <button className="button button--primary" onClick={onConnect}>
-            Connect transport
-          </button>
-        ) : (
-          <button className="button button--secondary" onClick={onDisconnect}>
-            Disconnect transport
-          </button>
-        )}
-
         <button
           className="button button--primary"
           onClick={onStartSession}
@@ -72,10 +54,6 @@ export function SessionControls(props: SessionControlsProps) {
           disabled={!canCapture}
         >
           Capture homework image
-        </button>
-
-        <button className="button button--danger" onClick={onInterrupt} disabled={!canEndSession}>
-          Interrupt tutor
         </button>
       </div>
     </section>

@@ -110,12 +110,6 @@ export default function Page() {
     session.logClientEvent("mic_listening", "Microphone capture started.", "success");
   }, [microphone, session]);
 
-  const handleInterrupt = useCallback(() => {
-    speechTurnActiveRef.current = false;
-    audioPlayer.stop();
-    session.interrupt();
-  }, [audioPlayer, session]);
-
   const handleEndSession = useCallback(() => {
     microphone.stop();
     speechTurnActiveRef.current = false;
@@ -127,12 +121,11 @@ export default function Page() {
     session.endSession();
   }, [audioPlayer, microphone, session]);
 
-  const handleDisconnect = useCallback(() => {
-    microphone.stop();
-    speechTurnActiveRef.current = false;
-    audioPlayer.stop();
-    session.disconnect();
-  }, [audioPlayer, microphone, session]);
+  useEffect(() => {
+    if (session.connectionState === "disconnected") {
+      session.connect();
+    }
+  }, [session]);
 
   useEffect(() => {
     if (session.connectionState !== "session_active" && microphone.isRecording) {
@@ -162,16 +155,12 @@ export default function Page() {
 
           <SessionControls
             connectionState={session.connectionState}
-            isTransportConnected={session.isTransportConnected}
             canStartSession={session.canStartSession}
             canEndSession={session.canEndSession}
             canCapture={webcam.isReady && isSessionActive}
-            onConnect={session.connect}
-            onDisconnect={handleDisconnect}
             onStartSession={session.startSession}
             onEndSession={handleEndSession}
             onCaptureImage={handleCapture}
-            onInterrupt={handleInterrupt}
           />
 
           <MicControls
