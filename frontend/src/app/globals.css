@@ -279,6 +279,32 @@ textarea {
   margin: 0;
 }
 
+.readiness-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.readiness-card {
+  border-radius: 18px;
+  padding: 16px;
+  background: var(--surface-strong);
+  border: 1px solid rgba(92, 72, 56, 0.08);
+}
+
+.readiness-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.05rem;
+}
+
+.readiness-card p:last-child {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
 .status-list__row {
   display: flex;
   justify-content: space-between;
@@ -316,7 +342,7 @@ textarea {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-height: 620px;
+  max-height: 420px;
   overflow: auto;
 }
 
@@ -353,12 +379,44 @@ textarea {
   line-height: 1.45;
 }
 
+.debug-toggle {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.debug-toggle__title {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.debug-stack {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 @media (max-width: 980px) {
   .workspace {
     grid-template-columns: 1fr;
   }
 
   .control-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .readiness-grid {
     grid-template-columns: 1fr;
   }
 }

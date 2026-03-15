@@ -1,11 +1,7 @@
 "use client";
 
 type StatusPanelProps = {
-  wsUrl: string;
   connectionState: string;
-  backendSessionId?: string;
-  model?: string;
-  responseModality?: string;
   lastAssistantText?: string;
   lastError?: string;
   isCameraReady: boolean;
@@ -16,11 +12,7 @@ type StatusPanelProps = {
 
 export function StatusPanel(props: StatusPanelProps) {
   const {
-    wsUrl,
     connectionState,
-    backendSessionId,
-    model,
-    responseModality,
     lastAssistantText,
     lastError,
     isCameraReady,
@@ -28,56 +20,54 @@ export function StatusPanel(props: StatusPanelProps) {
     isMicRecording,
     isAudioPlaying,
   } = props;
+  const tutorStatus = isAudioPlaying
+    ? "Tutor speaking"
+    : isMicRecording
+      ? "Listening"
+      : connectionState === "session_active"
+        ? "Ready"
+        : connectionState === "connecting"
+          ? "Connecting"
+          : "Start tutor session";
 
   return (
     <section className="panel">
       <div className="panel__header">
         <div>
-          <p className="eyebrow">Live State</p>
-          <h2 className="panel__title">Session Status</h2>
+          <p className="eyebrow">Tutor Status</p>
+          <h2 className="panel__title">Ready To Learn</h2>
         </div>
+        <span className="badge badge--muted">{tutorStatus}</span>
       </div>
 
-      <dl className="status-list">
-        <div className="status-list__row">
-          <dt>Backend WS</dt>
-          <dd>{wsUrl}</dd>
-        </div>
-        <div className="status-list__row">
-          <dt>Connection</dt>
-          <dd>{connectionState}</dd>
-        </div>
-        <div className="status-list__row">
-          <dt>Backend session</dt>
-          <dd>{backendSessionId ?? "Not assigned"}</dd>
-        </div>
-        <div className="status-list__row">
-          <dt>Model</dt>
-          <dd>{model ?? "Not started"}</dd>
-        </div>
-        <div className="status-list__row">
-          <dt>Response mode</dt>
-          <dd>{responseModality ?? "Unknown"}</dd>
-        </div>
-        <div className="status-list__row">
-          <dt>Camera</dt>
-          <dd>{isCameraReady ? "Ready" : "Unavailable"}</dd>
-        </div>
-        <div className="status-list__row">
-          <dt>Microphone</dt>
-          <dd>
-            {isMicRecording ? "Recording" : isMicReady ? "Ready" : "Unavailable"}
-          </dd>
-        </div>
-        <div className="status-list__row">
-          <dt>Assistant audio</dt>
-          <dd>{isAudioPlaying ? "Speaking" : "Idle"}</dd>
-        </div>
-      </dl>
+      <p className="subtle">
+        {connectionState === "session_active"
+          ? "Talk naturally or capture a homework image when you are ready."
+          : "The page connects in the background. Start the tutor when you want to begin."}
+      </p>
+
+      <div className="readiness-grid">
+        <article className="readiness-card">
+          <p className="eyebrow">Camera</p>
+          <strong>{isCameraReady ? "Ready" : "Unavailable"}</strong>
+          <p>{isCameraReady ? "Homework snapshots are available." : "Check camera permissions."}</p>
+        </article>
+        <article className="readiness-card">
+          <p className="eyebrow">Microphone</p>
+          <strong>{isMicRecording ? "Listening" : isMicReady ? "Ready" : "Unavailable"}</strong>
+          <p>
+            {isMicRecording
+              ? "Speak whenever you want to jump in."
+              : isMicReady
+                ? "Voice input is available."
+                : "Check microphone permissions."}
+          </p>
+        </article>
+      </div>
 
       {lastAssistantText ? (
         <div className="status-callout">
-          <p className="eyebrow">Latest assistant text</p>
+          <p className="eyebrow">Latest Tutor Reply</p>
           <p>{lastAssistantText}</p>
         </div>
       ) : null}

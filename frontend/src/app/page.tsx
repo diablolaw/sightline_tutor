@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { CameraPanel } from "@/components/CameraPanel";
 import { EventLog } from "@/components/EventLog";
@@ -11,13 +11,13 @@ import { useAudioPlayer } from "@/hooks/useAudioPlayer";
 import { useLiveSession } from "@/hooks/useLiveSession";
 import { useMicrophone } from "@/hooks/useMicrophone";
 import { useWebcamCapture } from "@/hooks/useWebcamCapture";
-import { config } from "@/lib/config";
 
 export default function Page() {
   const webcam = useWebcamCapture();
   const audioPlayer = useAudioPlayer();
   const micChunkCountRef = useRef(0);
   const speechTurnActiveRef = useRef(false);
+  const [showDebug, setShowDebug] = useState(false);
 
   const session = useLiveSession({
     onAssistantAudioChunk: audioPlayer.enqueueChunk,
@@ -140,7 +140,7 @@ export default function Page() {
         <h1>Live voice algebra tutoring with camera snapshots</h1>
         <p className="hero__body">
           Point the camera at a homework problem, capture a still image, speak to the tutor,
-          and monitor the live websocket session as the assistant responds in audio.
+          and get spoken help in real time.
         </p>
       </header>
 
@@ -176,11 +176,7 @@ export default function Page() {
 
         <section className="workspace__column">
           <StatusPanel
-            wsUrl={config.wsUrl}
             connectionState={session.connectionState}
-            backendSessionId={session.snapshot.backendSessionId}
-            model={session.snapshot.model}
-            responseModality={session.snapshot.responseModality}
             lastAssistantText={session.snapshot.lastAssistantText}
             lastError={session.snapshot.lastError}
             isCameraReady={webcam.isReady}
@@ -189,7 +185,45 @@ export default function Page() {
             isAudioPlaying={audioPlayer.isPlaying}
           />
 
-          <EventLog events={session.eventLog} />
+          <section className="panel">
+            <button
+              type="button"
+              className="debug-toggle"
+              onClick={() => setShowDebug((current) => !current)}
+            >
+              <span>
+                <span className="eyebrow">Debug</span>
+                <span className="debug-toggle__title">Technical details</span>
+              </span>
+              <span className="badge badge--muted">
+                {showDebug ? "Hide" : "Show"}
+              </span>
+            </button>
+
+            {showDebug ? (
+              <div className="debug-stack">
+                <dl className="status-list">
+                  <div className="status-list__row">
+                    <dt>Connection</dt>
+                    <dd>{session.connectionState}</dd>
+                  </div>
+                  <div className="status-list__row">
+                    <dt>Backend session</dt>
+                    <dd>{session.snapshot.backendSessionId ?? "Not assigned"}</dd>
+                  </div>
+                  <div className="status-list__row">
+                    <dt>Model</dt>
+                    <dd>{session.snapshot.model ?? "Not started"}</dd>
+                  </div>
+                  <div className="status-list__row">
+                    <dt>Response mode</dt>
+                    <dd>{session.snapshot.responseModality ?? "Unknown"}</dd>
+                  </div>
+                </dl>
+                <EventLog events={session.eventLog} />
+              </div>
+            ) : null}
+          </section>
         </section>
       </div>
     </main>

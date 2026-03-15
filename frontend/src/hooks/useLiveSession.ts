@@ -28,6 +28,8 @@ type UseLiveSessionOptions = {
 
 export function useLiveSession(options: UseLiveSessionOptions = {}) {
   const socketRef = useRef<WebSocket | null>(null);
+  const assistantTurnTextRef = useRef("");
+  const assistantTurnCompleteRef = useRef(true);
   const [connectionState, setConnectionState] = useState<ConnectionState>("disconnected");
   const [eventLog, setEventLog] = useState<LogEntry[]>([]);
   const [snapshot, setSnapshot] = useState<SessionSnapshot>({});
@@ -77,23 +79,35 @@ export function useLiveSession(options: UseLiveSessionOptions = {}) {
           );
           return;
         case "session_started":
+          assistantTurnTextRef.current = "";
+          assistantTurnCompleteRef.current = true;
           setConnectionState("session_active");
           setSnapshot((current) => ({
             ...current,
             backendSessionId: String(event.payload.session_id),
             model: String(event.payload.model),
             responseModality: String(event.payload.response_modality),
+            lastAssistantText: undefined,
           }));
           pushLog(makeLogEntry(event.type, "Tutor session started.", "success"));
           return;
-        case "assistant_text":
-          options.onAssistantText?.(String(event.payload.text ?? ""));
+        case "assistant_text": {
+          const chunk = String(event.payload.text ?? "");
+          if (assistantTurnCompleteRef.current) {
+            assistantTurnTextRef.current = chunk;
+            assistantTurnCompleteRef.current = false;
+          } else {
+            assistantTurnTextRef.current += chunk;
+          }
+          const fullText = assistantTurnTextRef.current.trim();
+          options.onAssistantText?.(fullText);
           setSnapshot((current) => ({
             ...current,
-            lastAssistantText: String(event.payload.text ?? ""),
+            lastAssistantText: fullText,
           }));
-          pushLog(makeLogEntry(event.type, String(event.payload.text ?? ""), "info"));
+          pushLog(makeLogEntry(event.type, chunk, "info"));
           return;
+        }
         case "user_transcript":
           options.onUserTranscript?.(String(event.payload.text ?? ""));
           pushLog(
@@ -117,6 +131,8 @@ export function useLiveSession(options: UseLiveSessionOptions = {}) {
           options.onInterrupted?.();
           return;
         case "session_ended":
+          assistantTurnTextRef.current = "";
+          assistantTurnCompleteRef.current = true;
           setConnectionState("transport_ready");
           pushLog(
             makeLogEntry(
@@ -128,6 +144,11 @@ export function useLiveSession(options: UseLiveSessionOptions = {}) {
           options.onSessionEnded?.();
           return;
         case "turn_complete":
+          assistantTurnCompleteRef.current = true;
+          setSnapshot((current) => ({
+            ...current,
+            lastAssistantText: assistantTurnTextRef.current.trim() || current.lastAssistantText,
+          }));
           pushLog(makeLogEntry(event.type, "Tutor finished the current turn.", "success"));
           return;
         case "error":

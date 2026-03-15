@@ -20,6 +20,12 @@ export function SessionControls(props: SessionControlsProps) {
     onEndSession,
     onCaptureImage,
   } = props;
+  const sessionLabel =
+    connectionState === "session_active"
+      ? "Session live"
+      : connectionState === "connecting"
+        ? "Connecting"
+        : "Waiting to start";
 
   return (
     <section className="panel">
@@ -28,7 +34,7 @@ export function SessionControls(props: SessionControlsProps) {
           <p className="eyebrow">Session</p>
           <h2 className="panel__title">Tutor Controls</h2>
         </div>
-        <span className="badge badge--muted">{connectionState}</span>
+        <span className="badge badge--muted">{sessionLabel}</span>
       </div>
 
       <div className="control-grid">

@@ -8,10 +8,10 @@ type EventLogProps = {
 
 export function EventLog({ events }: EventLogProps) {
   return (
-    <section className="panel panel--grow">
+    <section className="panel">
       <div className="panel__header">
         <div>
-          <p className="eyebrow">Monitor</p>
+          <p className="eyebrow">Debug</p>
           <h2 className="panel__title">Event Log</h2>
         </div>
         <span className="badge badge--muted">{events.length} events</span>
@@ -19,7 +19,7 @@ export function EventLog({ events }: EventLogProps) {
 
       <div className="event-log">
         {events.length === 0 ? (
-          <p className="subtle">No events yet. Connect transport to begin.</p>
+          <p className="subtle">No events yet.</p>
         ) : (
           events
             .slice()
