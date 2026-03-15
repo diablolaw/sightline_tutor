@@ -72,15 +72,6 @@ export default function Page() {
   });
 
   const handleCapture = useCallback(async () => {
-    if (microphone.isRecording) {
-      session.logClientEvent(
-        "capture_blocked",
-        "Stopping microphone before sending a homework snapshot.",
-        "warning",
-      );
-      microphone.stop();
-    }
-
     const frame = await webcam.captureFrame();
     if (!frame) {
       return;
@@ -92,7 +83,7 @@ export default function Page() {
     session.sendTextInput(
       "I just shared a homework image. Briefly acknowledge what you can see, then wait for my question.",
     );
-  }, [microphone, session, webcam]);
+  }, [session, webcam]);
 
   const toggleMic = useCallback(async () => {
     if (microphone.isRecording) {
@@ -174,7 +165,7 @@ export default function Page() {
             isTransportConnected={session.isTransportConnected}
             canStartSession={session.canStartSession}
             canEndSession={session.canEndSession}
-            canCapture={webcam.isReady && isSessionActive && !microphone.isRecording && !microphone.isStarting}
+            canCapture={webcam.isReady && isSessionActive}
             onConnect={session.connect}
             onDisconnect={handleDisconnect}
             onStartSession={session.startSession}
