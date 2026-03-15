@@ -1,0 +1,1 @@
+"""Typed websocket models."""
