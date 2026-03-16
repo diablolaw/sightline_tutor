@@ -168,7 +168,6 @@ export default function Page() {
           <StatusPanel
             connectionState={session.connectionState}
             lastAssistantText={session.snapshot.lastAssistantText}
-            lastError={session.snapshot.lastError}
             isCameraReady={webcam.isReady}
             isMicReady={microphone.isReady}
             isMicRecording={microphone.isRecording}

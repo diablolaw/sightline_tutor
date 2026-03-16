@@ -3,7 +3,6 @@
 type StatusPanelProps = {
   connectionState: string;
   lastAssistantText?: string;
-  lastError?: string;
   isCameraReady: boolean;
   isMicReady: boolean;
   isMicRecording: boolean;
@@ -14,7 +13,6 @@ export function StatusPanel(props: StatusPanelProps) {
   const {
     connectionState,
     lastAssistantText,
-    lastError,
     isCameraReady,
     isMicReady,
     isMicRecording,
@@ -69,13 +67,6 @@ export function StatusPanel(props: StatusPanelProps) {
         <div className="status-callout">
           <p className="eyebrow">Latest Tutor Reply</p>
           <p>{lastAssistantText}</p>
-        </div>
-      ) : null}
-
-      {lastError ? (
-        <div className="status-callout status-callout--error">
-          <p className="eyebrow">Latest error</p>
-          <p>{lastError}</p>
         </div>
       ) : null}
     </section>
