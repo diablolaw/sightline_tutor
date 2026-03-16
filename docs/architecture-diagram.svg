@@ -26,7 +26,7 @@
 
   <!-- Title -->
   <text x="80" y="88" fill="#0F172A" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="36" font-weight="700">
-    VisionTutor Architecture
+    SightLine Tutor Architecture
   </text>
   <text x="80" y="124" fill="#475569" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="500">
     Real-time vision-enabled voice tutor built with Gemini Live API on Google Cloud
