@@ -110,6 +110,23 @@ In production:
 - use HTTPS so camera and microphone permissions work reliably
 - ensure backend CORS/origin settings allow the frontend host
 
+### Deployment Scripts
+
+Repo-level PowerShell scripts are included for faster Cloud Run redeploys:
+
+- [`scripts/deploy-backend.ps1`](C:/git/gemini_hackathon/sightline_tutor/scripts/deploy-backend.ps1)
+- [`scripts/deploy-frontend.ps1`](C:/git/gemini_hackathon/sightline_tutor/scripts/deploy-frontend.ps1)
+
+Examples:
+
+```powershell
+.\scripts\deploy-backend.ps1 -ProjectId YOUR_PROJECT_ID -GeminiApiKey YOUR_KEY
+```
+
+```powershell
+.\scripts\deploy-frontend.ps1 -ProjectId YOUR_PROJECT_ID -BackendUrl https://your-backend-service.run.app/
+```
+
 ## Proof Of Google Cloud Deployment
 
 Google Cloud deployment proof video:
