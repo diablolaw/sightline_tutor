@@ -28,79 +28,92 @@
 
   <rect width="1400" height="900" rx="36" fill="url(#bg)"/>
 
-  <text x="80" y="90" fill="#1D1B19" font-family="Segoe UI, Arial, sans-serif" font-size="38" font-weight="700">
+  <text x="80" y="88" fill="#1D1B19" font-family="Segoe UI, Arial, sans-serif" font-size="38" font-weight="700">
     SightLine Tutor Architecture
   </text>
-  <text x="80" y="128" fill="#6B6259" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+  <text x="80" y="126" fill="#6B6259" font-family="Segoe UI, Arial, sans-serif" font-size="20">
     Gemini Live Agent challenge submission diagram
   </text>
 
-  <rect x="80" y="190" width="320" height="250" rx="28" fill="url(#card)" stroke="#D9CFC2" filter="url(#shadow)"/>
-  <text x="112" y="236" fill="#6B6259" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">USER DEVICE</text>
-  <text x="112" y="276" fill="#1D1B19" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">Next.js Frontend</text>
-  <text x="112" y="316" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="19">Web app hosted on Cloud Run</text>
-  <text x="112" y="360" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">- Camera preview and snapshot capture</text>
-  <text x="112" y="392" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">- Microphone capture and voice controls</text>
-  <text x="112" y="424" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">- Plays streamed tutor audio</text>
+  <rect x="70" y="190" width="320" height="250" rx="28" fill="url(#card)" stroke="#D9CFC2" filter="url(#shadow)"/>
+  <text x="102" y="232" fill="#6B6259" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">USER DEVICE</text>
+  <text x="102" y="272" fill="#1D1B19" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">Next.js Frontend</text>
+  <text x="102" y="312" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">
+    <tspan x="102" dy="0">Cloud Run web app</tspan>
+    <tspan x="102" dy="34">Camera preview</tspan>
+    <tspan x="102" dy="34">Homework snapshot capture</tspan>
+    <tspan x="102" dy="34">Microphone and tutor controls</tspan>
+    <tspan x="102" dy="34">Streamed tutor audio playback</tspan>
+  </text>
 
-  <rect x="540" y="150" width="360" height="330" rx="30" fill="url(#cloud)" stroke="#BFD2F2" filter="url(#shadow)"/>
-  <text x="572" y="196" fill="#5270A3" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">GOOGLE CLOUD</text>
-  <text x="572" y="236" fill="#1D1B19" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="700">FastAPI Backend</text>
-  <text x="572" y="274" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="20">Cloud Run service</text>
-  <text x="572" y="320" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">- WebSocket endpoint: /ws/live</text>
-  <text x="572" y="352" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">- Starts and manages Gemini Live sessions</text>
-  <text x="572" y="384" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">- Forwards text, image, and audio input</text>
-  <text x="572" y="416" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">- Streams tutor text/audio back to frontend</text>
-  <text x="572" y="448" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">- Cloud Run logs used as deployment proof</text>
+  <rect x="510" y="150" width="380" height="330" rx="30" fill="url(#cloud)" stroke="#BFD2F2" filter="url(#shadow)"/>
+  <text x="542" y="194" fill="#5270A3" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">GOOGLE CLOUD</text>
+  <text x="542" y="236" fill="#1D1B19" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="700">FastAPI Backend</text>
+  <text x="542" y="278" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">
+    <tspan x="542" dy="0">Cloud Run service</tspan>
+    <tspan x="542" dy="34">WebSocket endpoint: /ws/live</tspan>
+    <tspan x="542" dy="34">Starts Gemini Live sessions</tspan>
+    <tspan x="542" dy="34">Forwards text, image, and PCM audio</tspan>
+    <tspan x="542" dy="34">Streams tutor text and audio back</tspan>
+    <tspan x="542" dy="34">Produces Cloud Run logs</tspan>
+  </text>
 
-  <rect x="1030" y="190" width="290" height="250" rx="28" fill="url(#card)" stroke="#D9CFC2" filter="url(#shadow)"/>
-  <text x="1062" y="236" fill="#6B6259" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">GOOGLE AI</text>
-  <text x="1062" y="276" fill="#1D1B19" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">Gemini Live API</text>
-  <text x="1062" y="316" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="19">Gemini native audio model</text>
-  <text x="1062" y="360" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">- Multimodal understanding</text>
-  <text x="1062" y="392" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">- Audio responses and transcripts</text>
-  <text x="1062" y="424" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">- Real-time conversational turns</text>
+  <rect x="1010" y="190" width="320" height="250" rx="28" fill="url(#card)" stroke="#D9CFC2" filter="url(#shadow)"/>
+  <text x="1042" y="232" fill="#6B6259" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">GOOGLE AI</text>
+  <text x="1042" y="272" fill="#1D1B19" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">Gemini Live API</text>
+  <text x="1042" y="312" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">
+    <tspan x="1042" dy="0">Gemini native audio model</tspan>
+    <tspan x="1042" dy="34">Multimodal understanding</tspan>
+    <tspan x="1042" dy="34">Audio responses</tspan>
+    <tspan x="1042" dy="34">Transcripts and live turns</tspan>
+  </text>
 
-  <rect x="540" y="560" width="360" height="190" rx="30" fill="url(#card)" stroke="#D9CFC2" filter="url(#shadow)"/>
-  <text x="572" y="606" fill="#6B6259" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">SUPPORTING GCP SERVICE</text>
-  <text x="572" y="646" fill="#1D1B19" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">Cloud Run Logs</text>
-  <text x="572" y="688" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">Used to verify deployment health, session starts,</text>
-  <text x="572" y="718" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">audio streaming, disconnects, and errors.</text>
+  <rect x="70" y="560" width="320" height="180" rx="28" fill="url(#card)" stroke="#D9CFC2" filter="url(#shadow)"/>
+  <text x="102" y="604" fill="#6B6259" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">MULTIMODAL INPUTS</text>
+  <text x="102" y="646" fill="#1D1B19" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">Camera + Microphone</text>
+  <text x="102" y="688" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">
+    <tspan x="102" dy="0">Homework image snapshots</tspan>
+    <tspan x="102" dy="34">Voice questions and interruptions</tspan>
+  </text>
 
-  <path d="M400 315H520" stroke="#4F46E5" stroke-width="8" stroke-linecap="round" marker-end="url(#arrowBlue)"/>
-  <text x="417" y="292" fill="#4F46E5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700">WSS / live session</text>
-  <text x="413" y="338" fill="#4F46E5" font-family="Segoe UI, Arial, sans-serif" font-size="16">text, image, PCM audio</text>
+  <rect x="510" y="560" width="380" height="180" rx="28" fill="url(#card)" stroke="#D9CFC2" filter="url(#shadow)"/>
+  <text x="542" y="604" fill="#6B6259" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">SUPPORTING GCP SERVICE</text>
+  <text x="542" y="646" fill="#1D1B19" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">Cloud Run Logs</text>
+  <text x="542" y="688" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">
+    <tspan x="542" dy="0">Used to verify deployment health,</tspan>
+    <tspan x="542" dy="34">session starts, streaming, and errors</tspan>
+  </text>
 
-  <path d="M900 315H1010" stroke="#C88A17" stroke-width="8" stroke-linecap="round" marker-end="url(#arrowGold)"/>
-  <text x="915" y="292" fill="#C88A17" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700">Google GenAI SDK</text>
-  <text x="926" y="338" fill="#C88A17" font-family="Segoe UI, Arial, sans-serif" font-size="16">Gemini Live session</text>
+  <rect x="1010" y="560" width="320" height="180" rx="28" fill="url(#card)" stroke="#D9CFC2" filter="url(#shadow)"/>
+  <text x="1042" y="604" fill="#6B6259" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">OUTPUTS</text>
+  <text x="1042" y="646" fill="#1D1B19" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">Tutor Experience</text>
+  <text x="1042" y="688" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">
+    <tspan x="1042" dy="0">Spoken tutor response</tspan>
+    <tspan x="1042" dy="34">Latest tutor reply in UI</tspan>
+  </text>
 
-  <path d="M1175 458V512C1175 540 1152 563 1124 563H930" stroke="#1F8B4D" stroke-width="7" stroke-linecap="round" marker-end="url(#arrowGreen)"/>
-  <text x="976" y="536" fill="#1F8B4D" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700">responses and transcripts</text>
+  <path d="M390 315H490" stroke="#4F46E5" stroke-width="8" stroke-linecap="round" marker-end="url(#arrowBlue)"/>
+  <text x="404" y="290" fill="#4F46E5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700">WSS live session</text>
+  <text x="410" y="338" fill="#4F46E5" font-family="Segoe UI, Arial, sans-serif" font-size="16">text, image, PCM audio</text>
 
-  <path d="M720 490V540" stroke="#1F8B4D" stroke-width="7" stroke-linecap="round" marker-end="url(#arrowGreen)"/>
-  <text x="738" y="528" fill="#1F8B4D" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700">service logs</text>
+  <path d="M890 315H990" stroke="#C88A17" stroke-width="8" stroke-linecap="round" marker-end="url(#arrowGold)"/>
+  <text x="906" y="290" fill="#C88A17" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700">Google GenAI SDK</text>
+  <text x="920" y="338" fill="#C88A17" font-family="Segoe UI, Arial, sans-serif" font-size="16">Gemini Live session</text>
 
-  <rect x="80" y="560" width="320" height="190" rx="28" fill="url(#card)" stroke="#D9CFC2"/>
-  <text x="112" y="606" fill="#6B6259" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">MULTIMODAL INPUTS</text>
-  <text x="112" y="646" fill="#1D1B19" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">Camera + Microphone</text>
-  <text x="112" y="688" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">- Homework snapshots</text>
-  <text x="112" y="718" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">- Voice questions and interruptions</text>
+  <path d="M390 650H490" stroke="#4F46E5" stroke-width="6" stroke-dasharray="10 10" stroke-linecap="round" marker-end="url(#arrowBlue)"/>
+  <text x="404" y="632" fill="#4F46E5" font-family="Segoe UI, Arial, sans-serif" font-size="16">captured by frontend</text>
 
-  <path d="M400 654H520" stroke="#4F46E5" stroke-width="6" stroke-dasharray="10 10" stroke-linecap="round" marker-end="url(#arrowBlue)"/>
-  <text x="416" y="636" fill="#4F46E5" font-family="Segoe UI, Arial, sans-serif" font-size="16">captured by frontend</text>
+  <path d="M890 650H990" stroke="#1F8B4D" stroke-width="6" stroke-dasharray="10 10" stroke-linecap="round" marker-end="url(#arrowGreen)"/>
+  <text x="906" y="632" fill="#1F8B4D" font-family="Segoe UI, Arial, sans-serif" font-size="16">returned to user</text>
 
-  <rect x="1030" y="560" width="290" height="190" rx="28" fill="url(#card)" stroke="#D9CFC2"/>
-  <text x="1062" y="606" fill="#6B6259" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">OUTPUTS</text>
-  <text x="1062" y="646" fill="#1D1B19" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">Tutor Experience</text>
-  <text x="1062" y="688" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">- Spoken tutor response</text>
-  <text x="1062" y="718" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">- Latest tutor reply in UI</text>
+  <path d="M1170 448V505C1170 536 1146 560 1115 560H920" stroke="#1F8B4D" stroke-width="7" stroke-linecap="round" marker-end="url(#arrowGreen)"/>
+  <text x="968" y="534" fill="#1F8B4D" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">responses and transcripts</text>
 
-  <path d="M900 654H1010" stroke="#1F8B4D" stroke-width="6" stroke-dasharray="10 10" stroke-linecap="round" marker-end="url(#arrowGreen)"/>
-  <text x="916" y="636" fill="#1F8B4D" font-family="Segoe UI, Arial, sans-serif" font-size="16">returned to user</text>
+  <path d="M700 488V540" stroke="#1F8B4D" stroke-width="7" stroke-linecap="round" marker-end="url(#arrowGreen)"/>
+  <text x="720" y="526" fill="#1F8B4D" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">service logs</text>
 
-  <rect x="80" y="802" width="1240" height="54" rx="18" fill="#F1E9DD" stroke="#D8CCBC"/>
-  <text x="112" y="836" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">
-    Challenge requirements satisfied: Gemini model + Google GenAI SDK + Google Cloud service deployment (Cloud Run)
+  <rect x="70" y="800" width="1260" height="56" rx="18" fill="#F1E9DD" stroke="#D8CCBC"/>
+  <text x="100" y="836" fill="#4E463F" font-family="Segoe UI, Arial, sans-serif" font-size="18">
+    Challenge requirements satisfied: Gemini model + Google GenAI SDK + Google Cloud deployment on Cloud Run
   </text>
 </svg>
