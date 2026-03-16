@@ -85,6 +85,14 @@ export default function Page() {
     );
   }, [session, webcam]);
 
+  const toggleCamera = useCallback(async () => {
+    if (webcam.isEnabled) {
+      webcam.stopCamera();
+      return;
+    }
+    await webcam.startCamera();
+  }, [webcam]);
+
   const toggleMic = useCallback(async () => {
     if (microphone.isRecording) {
       session.logClientEvent("mic_stop", "Stopping microphone capture.", "warning");
@@ -149,8 +157,10 @@ export default function Page() {
           <CameraPanel
             videoRef={webcam.videoRef}
             isReady={webcam.isReady}
+            isEnabled={webcam.isEnabled}
             error={webcam.error}
             onRetry={webcam.startCamera}
+            onToggle={toggleCamera}
           />
 
           <SessionControls

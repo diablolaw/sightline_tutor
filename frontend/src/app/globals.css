@@ -231,6 +231,18 @@ textarea {
   color: #fff;
 }
 
+.camera-panel__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.camera-panel__toggle {
+  padding: 10px 14px;
+}
+
 .control-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

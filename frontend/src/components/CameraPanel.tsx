@@ -5,11 +5,20 @@ import type { RefObject } from "react";
 type CameraPanelProps = {
   videoRef: RefObject<HTMLVideoElement | null>;
   isReady: boolean;
+  isEnabled: boolean;
   error: string | null;
   onRetry: () => void;
+  onToggle: () => void;
 };
 
-export function CameraPanel({ videoRef, isReady, error, onRetry }: CameraPanelProps) {
+export function CameraPanel({
+  videoRef,
+  isReady,
+  isEnabled,
+  error,
+  onRetry,
+  onToggle,
+}: CameraPanelProps) {
   return (
     <section className="panel">
       <div className="panel__header">
@@ -17,16 +26,27 @@ export function CameraPanel({ videoRef, isReady, error, onRetry }: CameraPanelPr
           <p className="eyebrow">Camera</p>
           <h2 className="panel__title">Homework Preview</h2>
         </div>
-        <span className={`badge ${isReady ? "badge--success" : "badge--muted"}`}>
-          {isReady ? "Live" : "Waiting"}
-        </span>
+        <div className="camera-panel__actions">
+          <span className={`badge ${isReady ? "badge--success" : isEnabled ? "badge--muted" : "badge--danger"}`}>
+            {isReady ? "Live" : isEnabled ? "Waiting" : "Off"}
+          </span>
+          <button className="button button--secondary camera-panel__toggle" onClick={onToggle}>
+            {isEnabled ? "Stop camera" : "Enable camera"}
+          </button>
+        </div>
       </div>
 
       <div className="camera-frame">
         <video ref={videoRef} className="camera-frame__video" muted playsInline autoPlay />
         {!isReady && (
           <div className="camera-frame__overlay">
-            <p>{error ? "Camera unavailable" : "Requesting camera permission..."}</p>
+            <p>
+              {error
+                ? "Camera unavailable"
+                : isEnabled
+                  ? "Requesting camera permission..."
+                  : "Camera is off"}
+            </p>
             {error ? (
               <>
                 <p className="subtle">{error}</p>
@@ -34,6 +54,10 @@ export function CameraPanel({ videoRef, isReady, error, onRetry }: CameraPanelPr
                   Retry camera
                 </button>
               </>
+            ) : !isEnabled ? (
+              <button className="button button--secondary" onClick={onToggle}>
+                Enable camera
+              </button>
             ) : null}
           </div>
         )}

@@ -11,10 +11,12 @@ export function useWebcamCapture() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const startCamera = useCallback(async () => {
     try {
+      setIsEnabled(true);
       if (!streamRef.current) {
         streamRef.current = await navigator.mediaDevices.getUserMedia({
           video: {
@@ -43,7 +45,12 @@ export function useWebcamCapture() {
   const stopCamera = useCallback(() => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
     streamRef.current = null;
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
     setIsReady(false);
+    setIsEnabled(false);
+    setError(null);
   }, []);
 
   const captureFrame = useCallback(async (): Promise<CapturedFrame | null> => {
@@ -85,8 +92,9 @@ export function useWebcamCapture() {
       stopCamera,
       captureFrame,
       isReady,
+      isEnabled,
       error,
     }),
-    [captureFrame, error, isReady, startCamera, stopCamera],
+    [captureFrame, error, isEnabled, isReady, startCamera, stopCamera],
   );
 }
