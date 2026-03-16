@@ -11,15 +11,23 @@ It combines:
 
 The goal is simple: point the camera at a problem, start a tutor session, ask a question out loud, and get real-time spoken help.
 
+## Features
+
+- 🎤 Live voice tutoring
+- 📷 Homework image capture
+- 🧠 Multimodal reasoning with Gemini
+- 🔊 Real-time streamed tutor audio
+- ⚡ WebSocket-powered real-time interaction
+
 ## Repo Structure
 
-- [`frontend/`](C:/git/gemini_hackathon/sightline_tutor/frontend)
+- [`frontend/`](./frontend)
   - Next.js app for the demo UI
   - camera preview
   - microphone capture
   - tutor audio playback
   - optional debug panel for live-session inspection
-- [`backend/`](C:/git/gemini_hackathon/sightline_tutor/backend)
+- [`backend/`](./backend)
   - FastAPI websocket server
   - Gemini Live session management
   - message validation and event translation
@@ -77,7 +85,7 @@ Open `http://localhost:3000`.
 
 ### Backend
 
-Important variables are documented in [`backend/README.md`](C:/git/gemini_hackathon/sightline_tutor/backend/README.md), including:
+Important variables are documented in [`backend/README.md`](./backend/README.md), including:
 
 - `GEMINI_API_KEY`
 - `GEMINI_MODEL`
@@ -86,7 +94,7 @@ Important variables are documented in [`backend/README.md`](C:/git/gemini_hackat
 
 ### Frontend
 
-Important variables are documented in [`frontend/README.md`](C:/git/gemini_hackathon/sightline_tutor/frontend/README.md), including:
+Important variables are documented in [`frontend/README.md`](./frontend/README.md), including:
 
 - `NEXT_PUBLIC_WS_URL`
 
@@ -114,8 +122,8 @@ In production:
 
 Repo-level PowerShell scripts are included for faster Cloud Run redeploys:
 
-- [`scripts/deploy-backend.ps1`](C:/git/gemini_hackathon/sightline_tutor/scripts/deploy-backend.ps1)
-- [`scripts/deploy-frontend.ps1`](C:/git/gemini_hackathon/sightline_tutor/scripts/deploy-frontend.ps1)
+- [`scripts/deploy-backend.ps1`](./scripts/deploy-backend.ps1)
+- [`scripts/deploy-frontend.ps1`](./scripts/deploy-frontend.ps1)
 
 Examples:
 
@@ -157,5 +165,5 @@ The `Technical details` section is collapsed by default so the demo stays clean,
 
 ## More Detail
 
-- Frontend setup and behavior: [`frontend/README.md`](C:/git/gemini_hackathon/sightline_tutor/frontend/README.md)
-- Backend setup and websocket contract: [`backend/README.md`](C:/git/gemini_hackathon/sightline_tutor/backend/README.md)
+- Frontend setup and behavior: [`frontend/README.md`](./frontend/README.md)
+- Backend setup and websocket contract: [`backend/README.md`](./backend/README.md)

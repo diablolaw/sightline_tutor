@@ -17,7 +17,7 @@ Minimal FastAPI backend for a real-time, vision-enabled voice tutor powered by t
 - `PORT` optional, defaults to `8080`
 - `ALLOWED_ORIGINS` optional, comma-separated list for CORS
 - `GEMINI_MODEL` optional, defaults to `models/gemini-live-2.5-flash-preview`
-- `GEMINI_RESPONSE_MODALITY` optional, defaults to `AUDO`
+- `GEMINI_RESPONSE_MODALITY` optional, defaults to `AUDIO`
 
 ## Local Setup
 

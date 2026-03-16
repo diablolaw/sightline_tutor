@@ -62,7 +62,7 @@ npm run start
 
 ## Backend Contract
 
-The frontend expects the websocket backend implemented in [`backend/app/routes/ws.py`](C:/git/gemini_hackathon/sightline_tutor/backend/app/routes/ws.py).
+The frontend expects the websocket backend implemented in [`backend/app/routes/ws.py`](../backend/app/routes/ws.py).
 
 Typical flow:
 
