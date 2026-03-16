@@ -110,6 +110,14 @@ In production:
 - use HTTPS so camera and microphone permissions work reliably
 - ensure backend CORS/origin settings allow the frontend host
 
+## Proof Of Google Cloud Deployment
+
+Google Cloud deployment proof video:
+
+- https://www.youtube.com/watch?v=zqbUoMeGQSc
+
+This recording shows the project running on Google Cloud Run and serves as deployment proof for the Gemini Live Agent challenge submission.
+
 ## Demo Flow
 
 For the challenge submission, the intended flow is:
